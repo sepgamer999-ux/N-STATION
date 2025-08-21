@@ -1,0 +1,1039 @@
+<!doctype html>
+<html>
+
+<head>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="style/main.css">
+  <link rel="stylesheet" type="text/css" href="style/confirm.css">
+  <link rel="stylesheet" type="text/css" href="style/progress_activity.css">
+  <link rel="stylesheet" type="text/css" href="style/headers.css">
+  <link rel="stylesheet" type="text/css" href="style/drawer.css">
+
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+ 
+  <script src="./libs/PicoAudio.js" type="text/javascript"></script> 
+  <script src="./libs/webaudio.js" type="text/javascript"></script> 
+  <script src="./libs/webaudio-tinysynth.js" type="text/javascript"></script> 
+  <script src="./libs/BenzAMRRecorder.js" type="text/javascript"></script> 
+  <script src="libs/encoding.js"></script>
+  <script type="text/javascript" src="config/default.js" defer></script>
+  <script type="text/javascript" src="config/runtests.js" defer></script>
+  <script type="text/javascript" src="config/build.js" defer></script>
+  <script type="text/javascript" src="config/urlparams.js" defer></script>
+  <script type="text/javascript" src="libs/promise-6.0.0.js" defer></script>
+  <script type="text/javascript" src="polyfill/IndexedDB-getAll-shim.js" defer></script>
+  <script type="text/javascript" src="libs/compiled-method-cache.js" defer></script>
+  <script type="text/javascript" src="bld/native.js" defer></script>
+  <script type="text/javascript" src="bld/j2me.js" defer></script>
+  <script type="text/javascript" src="bld/main-all.js" defer></script>
+  <script type="text/javascript" src="keymap.js"></script>
+
+  <style>
+    /* New Nokia keyboard styles from second code */
+    #gamepad {
+      position: fixed;
+      right: 30px;
+      top: 100px;
+      width: 165px;
+      background: #f6f6f6;
+      border-radius: 12px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      overflow: hidden;
+      user-select: none;
+      z-index: 1000;
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      pointer-events: auto;
+      touch-action: none;
+      height: 500px;
+    }
+
+    #gamepad .window-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 12px;
+      background: linear-gradient(180deg, #2c3e50, #1a2530);
+      color: white;
+      cursor: grab;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    #gamepad .window-header:active {
+      cursor: grabbing;
+    }
+
+    #gamepad .hdr-icon {
+      font-size: 18px;
+    }
+
+    #gamepad .hdr-title {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    #gamepad .hdr-btn {
+      background: rgba(255, 255, 255, 0.2);
+      border: none;
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      color: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    #gamepad .hdr-btn:hover {
+      background: rgba(255, 255, 255, 0.3);
+    }
+
+    #gamepad .window-body {
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    #gamepad .soft-keys {
+      display: flex;
+      justify-content: space-between;
+    }
+
+    #gamepad .soft {
+      width: 100px;
+      height: 36px;
+      border-radius: 8px;
+      background: linear-gradient(180deg, #e0e0e0, #bdbdbd);
+      border: 1px solid #999;
+      font-weight: 700;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+      cursor: pointer;
+      transition: all 0.1s;
+    }
+
+    #gamepad .soft:active {
+      transform: translateY(2px);
+      box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    #gamepad .nokia-keypad {
+        display: grid;
+        grid-template-columns: repeat(3, 0fr);
+        gap: 10px;
+    }
+
+    #gamepad .num {
+      border-radius: 10px;
+      background: linear-gradient(180deg, #f7f7f7, #d0d0d0);
+      border: 1px solid #999;
+      font-weight: 700;
+      font-size: 20px;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.1s;
+    }
+
+    #gamepad .num:active {
+      transform: translateY(3px);
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #gamepad .nav-area {
+        position: relative;
+        scale: 0.7;
+        display: flex;
+        justify-content: center;
+        top: -30px;
+    }
+    
+    #gamepad .dpad {
+      display: grid;
+      grid-template-areas:
+          ". up ."
+          "left ok right"
+          ". down .";
+      gap: 8px;
+    }
+
+    #gamepad .nav {
+      width: 60px;
+      height: 60px;
+      border-radius: 10px;
+      background: linear-gradient(180deg, #f7f7f7, #d0d0d0);
+      border: 1px solid #999;
+      font-weight: 700;
+      color: #333;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+      transition: all 0.1s;
+    }
+
+    #gamepad .nav:active {
+      transform: translateY(3px);
+      box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.2);
+    }
+
+    #gamepad .up { grid-area: up; }
+    #gamepad .left { grid-area: left; }
+    #gamepad .ok { 
+      grid-area: ok; 
+      width: 70px;
+      height: 70px;
+      font-size: 18px;
+      background: linear-gradient(180deg, #4CAF50, #2E7D32);
+      color: white;
+    }
+    #gamepad .right { grid-area: right; }
+    #gamepad .down { grid-area: down; }
+
+    #gamepad.dragging { 
+      cursor: grabbing; 
+      transition: none !important; 
+    }
+
+    @media (max-width:420px), (max-height:600px) {
+      #gamepad { 
+        right: 6px; 
+        width: 240px; 
+      }
+      #gamepad .num { 
+        height: 50px; 
+        font-size: 18px; 
+      }
+      #gamepad .nav { 
+        width: 50px; 
+        height: 50px; 
+      }
+      #gamepad .ok { 
+        width: 60px; 
+        height: 60px; 
+        font-size: 16px; 
+      }
+      #canvas {
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          display: block;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <input id="File" type="file" style="visibility: hidden;display:none;"/>
+  <div id="pageContainer">
+      <pre id="consoleContainer"></pre>
+    <div id="profilerContainer">
+      <div id="profilerToolbar">
+        <div class="toolbarLabel">Profiler <span id="profilerMessage" class="toolbarMessage">6 Seconds</span></div>
+        <div id="profilerButtons">
+          <div id="profilerStartStop">Start</div>
+          <div id="profilerAdjustHeight">Height</div>
+        </div>
+      </div>
+      <div id="profiler">
+        <div id="profileList">
+        </div>
+        <div id="profilePanel">
+        </div>
+      </div>
+    </div>
+  </div>
+
+    <!-- The raw console is used for unit tests, so it's not visible by default: -->
+    <pre id="raw-console" style="display: none"></pre>
+
+  <div id="display-container">
+    <div id="display">
+      <section id="sidebar" data-type="sidebar" style="display:none">
+        <header>
+          <h1>Menu</h1>
+        </header>
+        <nav>
+          <ul>
+          </ul>
+        </nav>
+      </section>
+      <section id="drawer" role="region">
+        <header style="display:none">
+          <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
+          <a id="header-drawer-button" href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+          <menu id="header-ok-button" type="toolbar" style="display:none"><button>√</button></menu>
+          <h1 id="display_title"></h1>
+        </header>
+        <div id="main" role="main">
+          <canvas id="canvas"></canvas>
+          <input id="password-editor" class="text-editor" type="password">
+          <input id="tel-editor" class="text-editor" type="tel">
+          <input id="number-editor" class="text-editor" type="number">
+          <input id="email-editor" class="text-editor" type="email">
+          <input id="url-editor" class="text-editor" type="url">
+          <div id="textarea-editor" class="text-editor" contenteditable="true"></div>
+          <!-- The hidden textarea editor is used to measure the content height -->
+          <div id="hidden-textarea-editor" class="text-editor"></div>
+          <button id="back-button">Back</button>
+        </div>
+      </section>
+
+      <!-- Nokia keyboard with new design -->
+      <div id="gamepad" onselectstart='return false' onselect='document.selection.empty()'>
+        <div class="window-header">
+          <div class="hdr-icon"></div>
+          <div class="hdr-title"></div>
+          <button class="hdr-btn">✕</button>
+        </div>
+        
+        <div class="window-body">
+          <div class="soft-keys">
+            <button class="soft">L</button>
+            <button class="soft">R</button>
+          </div>
+          <div class="nokia-keypad">
+            <button class="num">1</button>
+            <button class="num">2</button>
+            <button class="num">3</button>
+            <button class="num">4</button>
+            <button class="num">5</button>
+            <button class="num">6</button>
+            <button class="num">7</button>
+            <button class="num">8</button>
+            <button class="num">9</button>
+            <button class="num">*</button>
+            <button class="num">0</button>
+            <button class="num">#</button>
+          </div>
+          <div class="nav-area">
+            <div class="dpad">
+              <button class="nav up">up</button>
+              <button class="nav left">left</button>
+              <button class="nav ok">OK</button>
+              <button class="nav right">right</button>
+              <button class="nav down">down</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="download-screen" class="screen">
+        <h1 class="title">Downloading midlet…</h1>
+        <div class="download-progress-container">
+          <progress class="pack-activity" id="download-bar" value="0" max="100"></progress>
+        </div>
+      </div>
+
+      <div id="splash-screen" class="screen">
+        <h1 class="title">Starting midlet…</h1>
+        <div class="splash-progress-container">
+          <progress></progress>
+        </div>
+      </div>
+
+      <div id="exit-screen" class="screen">
+      </div>
+
+      <div id="background-screen">
+      </div>
+
+      <form role="dialog" data-type="confirm"
+            class="lcdui-alert"
+            id="lcdui-alert" style="display: none">
+        <section>
+          <h1 class="title"></h1>
+          <p class="text"></p>
+          <p style="border-top: 0"><progress style="display: none"></progress></p>
+        </section>
+        <menu>
+          <button class="button0" style="display: none"></button>
+          <button class="button1" style="display: none"></button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm"
+            class="sms-listener-prompt"
+            id="sms-listener-prompt" style="display: none">
+        <section>
+          <h1>SMS Verification</h1>
+          <p class="verificationText"></p>
+            <input type="text" placeholder="Type SMS Here">
+            <p class="timeLeft"></p>
+            <progress class="timeLeftBar" value="0" max="100"></progress>
+        </section>
+        <menu>
+          <button class="cancel">Cancel</button>
+          <button class="recommend">Done</button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm"
+            class="nokia-fileui-prompt"
+            id="nokia-fileui-prompt" style="display: none">
+        <section>
+          <h1>Select a file</h1>
+          <p><input type="file" name="nokia-fileui-file">
+        </section>
+        <menu>
+          <button class="cancel">Cancel</button>
+          <button class="recommend">Done</button>
+        </menu>
+      </form>
+
+      <form role="dialog" data-type="confirm"
+            class="download-failure-dialog"
+            id="download-failure-dialog" style="display: none">
+        <section>
+          <h1 class="download-dialog-text">Download failure</h1>
+          <p>The download of midlet failed.  Press <i>Retry</i> to try again.</p>
+        </section>
+        <menu>
+          <button class="recommend">Retry</button>
+        </menu>
+      </form>
+    </div>
+    <div id="settings">
+      <section>
+        <table id="counters">
+          <tr><td>Bytecode:</td><td><span id="bytecodeCount"></span></td></tr>
+          <tr><td>Compiled:</td><td><span id="compiledCount"></span></td></tr>
+          <tr><td>Interpreter:</td><td><span id="interpreterCount"></span></td></tr>
+          <tr><td>OSR:</td><td><span id="onStackReplacementCount"></span></td></tr>
+          <tr><td>Unwind:</td><td><span id="unwindCount"></span></td></tr>
+          <tr><td>Preemption:</td><td><span id="preemptionCount"></span></td></tr>
+        </table>
+      </section>
+      <section>
+        <select id="loglevel">
+          <option value="0">Log Level: Trace
+          <option value="1">Log Level: Log
+          <option value="2">Log Level: Info
+          <option value="3">Log Level: Warn
+          <option value="4">Log Level: Error
+          <option value="5">Log Level: Silent
+        </select>
+          <input id="console-filter-input" type="text" placeholder="Filter Console Output" value="">
+          <button id="console-clear">Clear console</button>
+          <button id="console-save">Save console</button>
+        <label><input type="checkbox" id="perfWriter">Perf</label>
+      </section>
+      <section>
+        <button id="exportstorage">Export File System</button>
+        <div>Import File System:</div>
+        <input type="file" id="importstoragefile">
+        <input type="text" id="importstorageurl" placeholder="URL to FS backup">
+        <button id="importstorage">Import</button>
+        <button id="clearCompiledMethodCache">Clear Compiled Method Cache</button>
+        <button id="deleteDatabases">Delete IDB Databases</button>
+        <button id="printAllExceptions">Print all exceptions: OFF</button>
+        <button id="clearCounters">Clear Counters</button>
+        <button id="dumpCounters">Dump Counters</button>
+        <button id="sampleCounters1">One sample for 1s</button>
+        <button id="sampleCounters2">One sample for 100ms (2s)</button>
+        <select id="canvasSize">
+          <option value="" selected>Display size: 240x320</option>
+          <option value="size-320x240">Display size: 320x240</option>
+          <option value="size-320x480">Display size: 320x480</option>
+          <option value="size-480x320">Display size: 480x320</option>
+        </select>
+        <button id="start">Start</button>
+
+      </section>
+    </div>
+ </div>
+
+<!-- Combined JavaScript: Drag functionality + Key events + Position saving -->
+<script>
+(function() {
+  const gp = document.getElementById('gamepad');
+  if (!gp) return;
+
+  const STORAGE_KEY = 'gamepadPos_v1';
+  const header = gp.querySelector('.window-header');
+  const closeBtn = gp.querySelector('.hdr-btn:last-child');
+  const minimizeBtn = gp.querySelector('.hdr-btn:first-child');
+
+  function clamp(v, a, b) { return Math.max(a, Math.min(b, v)); }
+
+  // Position management
+  function restorePosition() {
+    try {
+      const raw = localStorage.getItem(STORAGE_KEY);
+      if (!raw) return;
+      const pos = JSON.parse(raw);
+      if (typeof pos.left === 'number' && typeof pos.top === 'number') {
+        gp.style.right = 'auto';
+        gp.style.left = pos.left + 'px';
+        gp.style.top = pos.top + 'px';
+        gp.style.transform = 'none';
+      }
+    } catch (e) { /* ignore */ }
+  }
+
+  function savePosition() {
+    try {
+      const left = gp.offsetLeft;
+      const top = gp.offsetTop;
+      localStorage.setItem(STORAGE_KEY, JSON.stringify({ left, top }));
+    } catch (e) { /* ignore */ }
+  }
+
+  function ensureInsideViewport() {
+    const w = window.innerWidth;
+    const h = window.innerHeight;
+    const ww = gp.offsetWidth;
+    const hh = gp.offsetHeight;
+    let left = gp.offsetLeft;
+    let top = gp.offsetTop;
+    left = clamp(left, 0, Math.max(0, w - ww));
+    top = clamp(top, 0, Math.max(0, h - hh));
+    gp.style.left = left + 'px';
+    gp.style.top = top + 'px';
+  }
+
+  // Drag functionality
+  let isDragging = false, startX, startY, initialLeft, initialTop;
+
+  header.addEventListener('mousedown', function(e) {
+    if (e.target.closest('.hdr-btn')) return; // Don't drag when clicking buttons
+    isDragging = true;
+    startX = e.clientX;
+    startY = e.clientY;
+    const rect = gp.getBoundingClientRect();
+    initialLeft = rect.left;
+    initialTop = rect.top;
+    gp.classList.add('dragging');
+    e.preventDefault();
+  });
+
+  document.addEventListener('mousemove', function(e) {
+    if (!isDragging) return;
+    const dx = e.clientX - startX;
+    const dy = e.clientY - startY;
+    const newLeft = clamp(initialLeft + dx, 0, Math.max(0, window.innerWidth - gp.offsetWidth));
+    const newTop = clamp(initialTop + dy, 0, Math.max(0, window.innerHeight - gp.offsetHeight));
+    gp.style.left = newLeft + 'px';
+    gp.style.top = newTop + 'px';
+    gp.style.right = 'auto';
+  });
+
+  document.addEventListener('mouseup', function() {
+    if (!isDragging) return;
+    isDragging = false;
+    gp.classList.remove('dragging');
+    setTimeout(() => { savePosition(); }, 30);
+  });
+
+  // Touch support for dragging
+  header.addEventListener('touchstart', function(e) {
+    if (e.target.closest('.hdr-btn')) return;
+    isDragging = true;
+    startX = e.touches[0].clientX;
+    startY = e.touches[0].clientY;
+    const rect = gp.getBoundingClientRect();
+    initialLeft = rect.left;
+    initialTop = rect.top;
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchmove', function(e) {
+    if (!isDragging) return;
+    const dx = e.touches[0].clientX - startX;
+    const dy = e.touches[0].clientY - startY;
+    const newLeft = clamp(initialLeft + dx, 0, Math.max(0, window.innerWidth - gp.offsetWidth));
+    const newTop = clamp(initialTop + dy, 0, Math.max(0, window.innerHeight - gp.offsetHeight));
+    gp.style.left = newLeft + 'px';
+    gp.style.top = newTop + 'px';
+    gp.style.right = 'auto';
+    e.preventDefault();
+  });
+
+  document.addEventListener('touchend', function() {
+    if (!isDragging) return;
+    isDragging = false;
+    gp.classList.remove('dragging');
+    savePosition();
+  });
+
+  // Button functionality
+  closeBtn.addEventListener('click', function() {
+    gp.style.display = 'none';
+    setTimeout(function() {
+      if (confirm('تم إخفاء لوحة المفاتيح. هل تريد إعادة عرضها؟')) {
+        gp.style.display = 'block';
+      }
+    }, 100);
+  });
+
+  minimizeBtn.addEventListener('click', function() {
+    alert('تم تصغير النافذة (هذه ميزة وهمية للعرض)');
+  });
+
+  // Key event simulation
+  function addInteractivity() {
+    const btns = gp.querySelectorAll('button:not(.hdr-btn)');
+    btns.forEach(btn => {
+      function activate(e) {
+        if (e && e.preventDefault) e.preventDefault();
+        btn.classList.add('active');
+        const key = (btn.textContent || '').trim();
+        try {
+          window.dispatchEvent(new KeyboardEvent('keydown', {key: key, bubbles: true}));
+        } catch(_) {
+          window.dispatchEvent(new CustomEvent('gamepad-key', {detail: {key: key}}));
+        }
+      }
+
+      function deactivate() {
+        btn.classList.remove('active');
+        const key = (btn.textContent || '').trim();
+        try {
+          window.dispatchEvent(new KeyboardEvent('keyup', {key: key, bubbles: true}));
+        } catch(_) {
+          window.dispatchEvent(new CustomEvent('gamepad-keyup', {detail: {key: key}}));
+        }
+      }
+
+      btn.addEventListener('mousedown', activate);
+      btn.addEventListener('mouseup', deactivate);
+      btn.addEventListener('mouseleave', deactivate);
+      btn.addEventListener('touchstart', function(e){ activate(e); }, {passive: false});
+      btn.addEventListener('touchend', deactivate);
+      btn.addEventListener('touchcancel', deactivate);
+      btn.addEventListener('keydown', function(e){ if (e.key === 'Enter' || e.key === ' ') activate(e); });
+      btn.addEventListener('keyup', function(e){ if (e.key === 'Enter' || e.key === ' ') deactivate(e); });
+    });
+  }
+
+  // Keyboard navigation for gamepad
+  gp.setAttribute('tabindex', '0');
+  gp.addEventListener('keydown', function(e) {
+    const step = e.shiftKey ? 20 : 8;
+    let moved = false;
+    if (e.key === 'ArrowLeft') { gp.style.left = (gp.offsetLeft - step) + 'px'; moved = true; }
+    if (e.key === 'ArrowRight') { gp.style.left = (gp.offsetLeft + step) + 'px'; moved = true; }
+    if (e.key === 'ArrowUp') { gp.style.top = (gp.offsetTop - step) + 'px'; moved = true; }
+    if (e.key === 'ArrowDown') { gp.style.top = (gp.offsetTop + step) + 'px'; moved = true; }
+    if (moved) {
+      e.preventDefault();
+      ensureInsideViewport();
+      savePosition();
+    }
+  });
+
+  // Window resize handler
+  window.addEventListener('resize', function() {
+    setTimeout(() => {
+      ensureInsideViewport();
+    }, 80);
+  });
+
+  // Double click to reset position
+  gp.addEventListener('dblclick', function() {
+    localStorage.removeItem(STORAGE_KEY);
+    gp.style.left = '';
+    gp.style.top = '';
+    gp.style.right = '30px';
+    gp.style.transform = '';
+  });
+
+  // Initialize
+  restorePosition();
+  setTimeout(() => {
+    ensureInsideViewport();
+  }, 50);
+  addInteractivity();
+
+})();
+</script>
+
+<!-- اوامر الconsole -->
+
+<!-- زر الاعدادات -->
+
+<script>
+
+(() => {
+  if (window._keyRemapperInjected) return console.log('KeyRemapper already injected.');
+  window._keyRemapperInjected = true;
+
+  const STORAGE_KEY = 'keyRemapper_mappings_v1';
+  const STORAGE_ENABLED = 'keyRemapper_enabled_v1';
+  const TARGETS = ['0','1','2','3','4','5','6','7','8','9','*','#'];
+  const FORBIDDEN_CODES = new Set(['ArrowUp','ArrowDown','ArrowLeft','ArrowRight','Enter']);
+
+  const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}'); } catch(e){ return {}; } };
+  const save = (m) => { localStorage.setItem(STORAGE_KEY, JSON.stringify(m)); };
+  const loadEnabled = () => localStorage.getItem(STORAGE_ENABLED) !== 'false';
+  const saveEnabled = (v) => localStorage.setItem(STORAGE_ENABLED, v ? 'true' : 'false');
+
+  let mappings = load();
+  let enabled = loadEnabled();
+  let isPicking = false;
+
+  const pretty = (code) => {
+    if (!code) return '';
+    const map = {
+      'Space': 'المسافة (Space)',
+      'Escape': 'Escape',
+      'Tab': 'Tab',
+      'Backspace': 'Backspace',
+      'ShiftLeft':'Shift (يسار)','ShiftRight':'Shift (يمين)',
+      'ControlLeft':'Ctrl (يسار)','ControlRight':'Ctrl (يمين)',
+      'AltLeft':'Alt (يسار)','AltRight':'Alt (يمين)',
+      'MetaLeft':'Meta','MetaRight':'Meta'
+    };
+    return map[code] || code;
+  };
+
+  // ----- styles -----
+  const style = document.createElement('style');
+  style.textContent = `
+  #keyRemap_btn { position: fixed; right: 18px; bottom: 18px; z-index:2147483646; width: 60px; height: 60px; border-radius: 10px;
+    background: linear-gradient(180deg, #f7f7f7, #d0d0d0); border: 1px solid #999; font-weight: 700; color: #333; display: flex;
+    align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: all 0.1s; font-size: 24px; user-select: none;}
+  #keyRemap_btn:hover { transform: translateY(-3px); box-shadow: 0 6px 12px rgba(0,0,0,0.12); }
+  #keyRemap_modal { position: fixed; inset:0; display:none; align-items:center; justify-content:center; z-index:2147483646; background: rgba(0,0,0,0.35); }
+  #keyRemap_dialog { width: 560px; max-width: 96%; background:white; border-radius:10px; padding:18px; box-shadow:0 8px 30px rgba(0,0,0,0.3); font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; position: relative; }
+  #keyRemap_dialog_close { position: absolute; top:10px; right:10px; width:28px; height:28px; border:none; background:#eee; border-radius:50%; font-weight:bold; font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 2px 4px rgba(0,0,0,0.2); transition: all 0.1s; }
+  #keyRemap_dialog_close:hover { background:#d33; color:white; transform: scale(1.1); }
+  .kr-row { display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 0; border-bottom:1px solid #eee; }
+  .kr-left { display:flex; align-items:center; gap:8px; }
+  .kr-target { font-weight:700; width:36px; text-align:center; }
+  .kr-mapped { font-size:13px; color:#333; min-width:150px; padding:6px 8px; border-radius:6px; border:1px dashed transparent; cursor:pointer; user-select:none; display:inline-flex; align-items:center; gap:6px; }
+  .kr-mapped:hover { border-color:#ddd; background:#fafafa; }
+  .kr-btn { padding:6px 10px; border-radius:6px; cursor:pointer; border:1px solid #ddd; background:#fafafa; }
+  .kr-remove { background:transparent; border:none; color:#900; font-weight:700; cursor:pointer; width:26px; height:26px; border-radius:6px; display:inline-flex; align-items:center; justify-content:center; }
+  .kr-remove:hover { background:#fbeaea; }
+  .kr-controls { display:flex; gap:8px; margin-top:12px; justify-content:space-between; align-items:center; }
+  .kr-small { font-size:13px; color:#666; }
+  .kr-status { margin-left:8px; font-size:13px; color:#222; }
+  #kr_capture_overlay { position: fixed; inset: 0; z-index: 2147483647; background: rgba(0,0,0,0.15); display: none; align-items: center; justify-content: center; }
+  #kr_capture_box { background: white; padding: 14px 18px; border-radius: 8px; box-shadow: 0 8px 24px rgba(0,0,0,0.3); font-size: 16px; text-align:center; }
+  .kr-pallet-btn { min-width:40px; height:40px; border-radius:6px; border:1px solid #ccc; background:#fff; cursor:pointer; display:flex; align-items:center; justify-content:center; font-weight:700; }
+  `;
+  document.head.appendChild(style);
+
+  // ----- UI -----
+  const btn = document.createElement('button');
+  btn.id = 'keyRemap_btn';
+  btn.type = 'button';
+  btn.innerHTML = '⚙';
+  btn.title = 'إعدادات الترجمة';
+  document.body.appendChild(btn);
+
+  const modal = document.createElement('div');
+  modal.id = 'keyRemap_modal';
+  modal.innerHTML = `
+    <div id="keyRemap_dialog" role="dialog" aria-modal="true">
+      <button id="keyRemap_dialog_close" title="إغلاق">×</button>
+      <h2>إعدادات ترجمة المفاتيح (دعم J2ME)</h2>
+
+      <div style="display:flex; gap:8px; align-items:center; margin-bottom:8px;">
+        <button class="kr-btn" id="kr_quick_assign">تعيين سريع</button>
+        <label style="margin-left:6px;"><input type="checkbox" id="kr_enabled"> تشغيل</label>
+        <span class="kr-status" id="kr_status" style="margin-left:8px;"></span>
+        <div style="margin-left:auto; display:flex; gap:8px;">
+          <button class="kr-btn" id="kr_reset">إعادة تعيين الكل</button>
+        </div>
+      </div>
+
+      <div id="kr_quick_panel" style="display:none;">
+        <div class="kr-small">اختر الهدف ثم اضغط المفتاح الذي تريد تعيينه أو اضغط Esc للإلغاء:</div>
+        <div id="kr_quick_palette"></div>
+      </div>
+
+      <div id="kr_list" style="max-height:320px; overflow:auto; padding-right:6px; margin-top:8px;"></div>
+
+      <div style="margin-top:10px;" class="kr-small">
+        اضغط على اسم التعيين لتغييره — اضغط زر × لإزالة التعيين.
+      </div>
+    </div>
+  `;
+  document.body.appendChild(modal);
+
+  const krList = modal.querySelector('#kr_list');
+  const krEnabled = modal.querySelector('#kr_enabled');
+  const krStatus = modal.querySelector('#kr_status');
+  const krQuickAssignBtn = modal.querySelector('#kr_quick_assign');
+  const krQuickPanel = modal.querySelector('#kr_quick_panel');
+  const krQuickPalette = modal.querySelector('#kr_quick_palette');
+  const overlay = document.createElement('div');
+  overlay.id = 'kr_capture_overlay';
+  overlay.innerHTML = `<div id="kr_capture_box">اضغط المفتاح الذي تريد تعيينه أو اضغط Esc للإلغاء</div>`;
+  document.body.appendChild(overlay);
+
+  function showOverlay() { overlay.style.display = 'flex'; }
+  function hideOverlay() { overlay.style.display = 'none'; }
+
+  function startPickingForTarget(target) {
+    if (isPicking) return;
+    isPicking = true;
+    showOverlay();
+
+    function keyListener(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (e.code === 'Escape') { stopPicking(); return; }
+      if (FORBIDDEN_CODES.has(e.code)) return;
+      mappings[target] = e.code;
+      save(mappings);
+      updateList();
+      stopPicking();
+    }
+    function stopPicking() {
+      isPicking = false;
+      hideOverlay();
+      document.removeEventListener('keydown', keyListener, true);
+    }
+    document.addEventListener('keydown', keyListener, true);
+  }
+
+  function removeMappingFor(target) {
+    if (mappings[target]) {
+      delete mappings[target];
+      save(mappings);
+      updateList();
+    }
+  }
+
+  function updateList() {
+    krList.innerHTML = '';
+    for (let t of TARGETS) {
+      const row = document.createElement('div');
+      row.className = 'kr-row';
+      const left = document.createElement('div');
+      left.className = 'kr-left';
+      const lbl = document.createElement('div');
+      lbl.className = 'kr-target';
+      lbl.textContent = t;
+
+      const mapped = document.createElement('div');
+      mapped.className = 'kr-mapped';
+      mapped.textContent = pretty(mappings[t]) || '-';
+      mapped.title = 'اضغط لتعيين/تغيير';
+      mapped.addEventListener('click', () => startPickingForTarget(t));
+
+      const removeBtn = document.createElement('button');
+      removeBtn.className = 'kr-remove';
+      removeBtn.title = 'إزالة التعيين';
+      removeBtn.innerHTML = '×';
+      removeBtn.addEventListener('click', (ev) => {
+        ev.stopPropagation();
+        removeMappingFor(t);
+      });
+
+      // group mapped + remove button
+      const mapWrap = document.createElement('div');
+      mapWrap.style.display = 'flex';
+      mapWrap.style.alignItems = 'center';
+      mapWrap.style.gap = '6px';
+      mapWrap.appendChild(mapped);
+      mapWrap.appendChild(removeBtn);
+
+      left.append(lbl, mapWrap);
+      row.appendChild(left);
+      krList.appendChild(row);
+    }
+    krEnabled.checked = enabled;
+    krStatus.textContent = enabled ? 'مفعل' : 'معطل';
+  }
+
+  btn.addEventListener('click', () => { modal.style.display = 'flex'; });
+  modal.querySelector('#keyRemap_dialog_close').addEventListener('click', () => { modal.style.display = 'none'; });
+  krEnabled.addEventListener('change', () => { enabled = krEnabled.checked; saveEnabled(enabled); updateList(); });
+  modal.querySelector('#kr_reset').addEventListener('click', () => { mappings = {}; save(mappings); updateList(); });
+  krQuickAssignBtn.addEventListener('click', () => {
+    krQuickPanel.style.display = krQuickPanel.style.display === 'none' ? 'block' : 'none';
+    krQuickPalette.innerHTML = '';
+    TARGETS.forEach(t => {
+      const b = document.createElement('button');
+      b.className = 'kr-pallet-btn';
+      b.textContent = t;
+      b.addEventListener('click', () => startPickingForTarget(t));
+      krQuickPalette.appendChild(b);
+    });
+  });
+
+  updateList();
+
+  // helper: insert text at caret in contenteditable
+  function insertTextAtContentEditable(text) {
+    const sel = window.getSelection();
+    if (!sel || sel.rangeCount === 0) return false;
+    const range = sel.getRangeAt(0);
+    range.deleteContents();
+    const node = document.createTextNode(text);
+    range.insertNode(node);
+    range.setStartAfter(node);
+    range.setEndAfter(node);
+    sel.removeAllRanges();
+    sel.addRange(range);
+    return true;
+  }
+
+  function keyInfoForTarget(key) {
+    const charCode = key.length === 1 ? key.charCodeAt(0) : 0;
+    let code = 'Unidentified';
+    if (/^[0-9]$/.test(key)) code = 'Digit' + key;
+    if (/^[a-zA-Z]$/.test(key)) code = 'Key' + key.toUpperCase();
+    if (key === '*') code = 'NumpadMultiply';
+    if (key === '#') code = 'Unidentified';
+    const keyCode = charCode || 0;
+    return { key, code, keyCode, which: keyCode, charCode: charCode, location: 0 };
+  }
+
+  function createKeyboardEvent(type, init) {
+    let evt;
+    try {
+      evt = new KeyboardEvent(type, init);
+    } catch (e) {
+      try {
+        evt = document.createEvent('Event');
+        evt.initEvent(type, init.bubbles, init.cancelable);
+        evt.key = init.key;
+        evt.code = init.code;
+      } catch (ee) {
+        evt = { type };
+      }
+    }
+    try {
+      Object.defineProperty(evt, 'keyCode', { get: () => init.keyCode });
+      Object.defineProperty(evt, 'which', { get: () => init.which });
+      Object.defineProperty(evt, 'charCode', { get: () => init.charCode });
+    } catch (e) {}
+    // علامة خاصة حتى يتجاهلها المستمع الرئيسي (منع recursion)
+    try { evt._krSynthetic = true; } catch (e) {}
+    return evt;
+  }
+
+  function dispatchToJ2METargets(key) {
+    const info = keyInfoForTarget(key);
+    const baseInit = {
+      key: info.key,
+      code: info.code,
+      location: info.location,
+      bubbles: true,
+      cancelable: true,
+      composed: true,
+      keyCode: info.keyCode,
+      which: info.which,
+      charCode: info.charCode
+    };
+
+    const evtDown = createKeyboardEvent('keydown', baseInit);
+    const evtPress = createKeyboardEvent('keypress', baseInit);
+    const evtUp   = createKeyboardEvent('keyup', baseInit);
+
+    const targets = new Set();
+    try { if (document.activeElement) targets.add(document.activeElement); } catch(e){}
+    try { const mid = document.elementFromPoint(window.innerWidth/2, window.innerHeight/2); if (mid) targets.add(mid); } catch(e){}
+    try { document.querySelectorAll('canvas').forEach(c=>targets.add(c)); } catch(e){}
+    targets.add(document);
+    targets.add(document.body);
+    targets.add(window);
+
+    targets.forEach(t => {
+      try { t.dispatchEvent(evtDown); } catch(e){}
+      try { t.dispatchEvent(evtPress); } catch(e){}
+    });
+
+    setTimeout(() => {
+      targets.forEach(t => {
+        try { t.dispatchEvent(evtUp); } catch(e){}
+      });
+    }, 35);
+  }
+
+  // === main remap handler ===
+  window.addEventListener('keydown', (e) => {
+    try {
+      // تجاهل الأحداث الصناعية المولّدة من السكربت نفسه
+      if (e._krSynthetic) return;
+      if (isPicking) return;
+      if (modal && modal.style.display === 'flex') return;
+      if (!enabled) return;
+      if (FORBIDDEN_CODES.has(e.code)) return;
+
+      const target = Object.entries(mappings).find(([k,v]) => v === e.code)?.[0];
+      if (!target) return;
+
+      // إذا الهدف يساوي المفتاح الفعلي الذي سينتج عن الضغط (مثلاً target === '0' و e.key === '0')
+      // فلا نفعل شيئًا — هذا يمنع حالات "0 -> 0" من تعطيل الإدخال.
+      if (String(e.key) === String(target)) return;
+
+      // منع المفتاح الأصلي ثم محاولة إدراج أو إرسال صناعي
+      e.preventDefault();
+      e.stopPropagation();
+
+      const activeEl = document.activeElement;
+      if (activeEl && (activeEl.tagName === 'INPUT' || activeEl.tagName === 'TEXTAREA') && !activeEl.readOnly && !activeEl.disabled) {
+        try {
+          const start = activeEl.selectionStart !== null ? activeEl.selectionStart : activeEl.value.length;
+          const end = activeEl.selectionEnd !== null ? activeEl.selectionEnd : start;
+          const val = activeEl.value || '';
+          activeEl.value = val.slice(0, start) + target + val.slice(end);
+          const newPos = start + target.length;
+          activeEl.selectionStart = activeEl.selectionEnd = newPos;
+          activeEl.dispatchEvent(new Event('input', { bubbles: true }));
+          return;
+        } catch (err) {}
+      }
+
+      if (activeEl && activeEl.isContentEditable) {
+        if (insertTextAtContentEditable(target)) return;
+      }
+
+      // otherwise dispatch إلى أهداف اللعبة (canvas, window, document, ...)
+      dispatchToJ2METargets(target);
+
+    } catch (err) {
+      console.error('keyRemap error:', err);
+    }
+  }, true);
+
+  // expose for debugging & runtime control
+  window._keyRemapper = {
+    mappings,
+    save,
+    load,
+    updateList,
+    removeMappingFor,
+    dispatchToJ2METargets
+  };
+})();
+
+</script>
+
+
+<!-- لتكبير الcanvas -->
+
+<script>
+
+const canvas = document.getElementById("canvas");
+
+setInterval(() => {
+  canvas.style.width = "unset";
+  canvas.style.height = "100vh";
+  canvas.style.display = "block";
+}, 100); // كل 100 ملي ثانية
+
+
+
+</script>
+
+</body>
+
+</html>

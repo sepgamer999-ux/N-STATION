@@ -1,0 +1,62 @@
+NOTICE for N-STATION 
+=====================================
+
+Project repository:
+https://github.com/sepgamer999-ux/N-STATION
+
+Project license (main):
+GNU Affero General Public License v3 (AGPLv3)
+See: LICENSE.txt (full AGPLv3 text should be included in project root)
+
+Third-party components and attributions
+---------------------------------------
+
+1) PlayStation 4 UI background
+   - License: MIT License
+   - Author / Source: Arturo Cabrera (Pixmy) — CodePen
+   - Link: https://codepen.io/Pixmy/pen/qaYQoV
+   - Note: The PS4 UI background is included under the MIT License. Its copyright
+     notice and the MIT license text are preserved in LICENSE-MIT.txt.
+
+2) J2meJS (Nokia Java Games emulator)
+   - Author / Original repository: Rosabis
+   - Link: https://github.com/Rosabis/J2meJS
+   - Note: The original J2meJS project has been taken over/continued at:
+     https://github.com/zixing131/myjump
+   - License: See the original repository for the exact license(s) that apply
+     (may vary per version). Confirm and comply with that repository's license
+     if you reuse J2meJS code.
+
+3) Other assets / game files
+   - This project includes only legally open-source games and assets.
+   - Commercial/proprietary games are NOT included in this repository.
+   - Official archives for personal downloads (not distributed here):
+     - Nokia Java Games: https://archive.org/details/NokiaJavaGames
+     - Sonic Java Games: https://archive.org/download/all-available-sonic-java-games
+
+Important legal notes
+---------------------
+- The combined project is licensed under AGPLv3 (see LICENSE.txt). Any distribution
+  of the project as a whole is therefore subject to AGPLv3 terms.
+- The PS4 UI background is licensed under MIT (see LICENSE-MIT.txt). MIT permits
+  inclusion within an AGPL project, provided the MIT copyright and license text
+  remain present (which this project preserves).
+- If any file is a mixture of AGPL and MIT code and cannot be separated, the
+  practical effect is that the distributed combined work is governed by AGPLv3,
+  while MIT copyright notices must still be preserved.
+- If you intend to reuse third-party components from this repository in other projects,
+  confirm the exact license for each component and follow its terms.
+
+Where license texts are stored in this repository
+-------------------------------------------------
+- AGPLv3 full text: LICENSE.txt
+- MIT License text for PS4 background: LICENSE-MIT.txt
+- This NOTICE file: NOTICE.txt
+
+Contact / Questions
+-------------------
+If you have questions about licensing or attributions in this project, open an issue
+on the repository or contact the repository maintainer via the GitHub account:
+https://github.com/sepgamer999-ux
+
+(End of NOTICE)

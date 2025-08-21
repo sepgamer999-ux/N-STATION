@@ -1,0 +1,1547 @@
+/*
+Project: N-STATION / "نسخة من كل شيء"
+© 2025 N-STATION
+
+⚠️ WARNING: This file contains:
+
+1. Main project code: GNU AGPLv3
+2. PlayStation 4 UI background: MIT License (Arturo Cabrera - Pixmy)
+
+Important:
+- Any modification or distribution of this file is **under AGPLv3**.
+- The MIT component retains its copyright notice; see LICENSE-MIT.txt.
+
+See files:
+- LICENSE.txt → Full AGPLv3
+- LICENSE-MIT.txt → Full MIT
+*/
+
+
+<html lang="ar" class="debug-mode"><head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>N-STATION</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: 
+#0e6cc4;
+            overflow: hidden;
+            height: 100vh;
+        }
+        /* الأمواج المتحركة */
+        .box {
+            position: fixed;
+            top: 0;
+            transform: rotate(80deg);
+            left: 0;
+        }
+        .wave {
+            position: fixed;
+            top: 0;
+            left: 0;
+            opacity: .4;
+            position: absolute;
+            top: 3%;
+            left: 10%;
+            background: #0af;
+            width: 1500px;
+            height: 1300px;
+            margin-left: -150px;
+            margin-top: -250px;
+            transform-origin: 50% 48%;
+            border-radius: 43%;
+            animation: drift 7000ms infinite linear;
+        }
+        .wave.-three {
+            animation: drift 7500ms infinite linear;
+            position: fixed;
+            background-color: 
+#77daff;
+        }
+        .wave.-two {
+            animation: drift 3000ms infinite linear;
+            opacity: .1;
+            background: black;
+            position: fixed;
+        }
+        .box:after {
+            content: '';
+            display: block;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 11;
+            transform: translate3d(0, 0, 0);
+        }
+        @keyframes drift {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        .game-library{
+                position: absolute;
+    left: 600px;
+    width: 10000px;
+            }
+    </style>
+</head>
+<body style="
+    background-color: #0e6cc4;
+    overflow: scroll;
+">
+    <!-- الخلفية المتحركة بالأمواج -->
+    <div class="box">
+        <div class="wave -one"></div>
+        <div class="wave -two"></div>
+        <div class="wave -three"></div>
+    </div>
+
+
+
+
+    <meta charset="utf-8">
+    <title>J2ME Game Console</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1">
+    
+    <!-- Original J2ME emulator scripts -->
+    <script src="libs/encoding.js"></script>
+    <script type="text/javascript" src="config/default.js" defer=""></script>
+    <script type="text/javascript" src="config/runtests.js" defer=""></script>
+    <script type="text/javascript" src="config/build.js" defer=""></script>
+    <script type="text/javascript" src="config/urlparams.js" defer=""></script>
+    <script type="text/javascript" src="libs/promise-6.0.0.js" defer=""></script>
+    <script type="text/javascript" src="polyfill/IndexedDB-getAll-shim.js" defer=""></script>
+    <script type="text/javascript" src="libs/compiled-method-cache.js" defer=""></script>
+    <script type="text/javascript" src="bld/native.js" defer=""></script>
+    <script type="text/javascript" src="bld/j2me.js" defer=""></script>
+    <script type="text/javascript" src="bld/main-all.js" defer=""></script>
+
+
+    <!-- Console Header -->
+    <div class="console-header">
+        <div class="console-logo">
+            <div class="logo-icon">🎮</div>
+            <h1>N-STATION</h1>
+        </div>
+        <div class="console-status">
+            <span class="status-indicator active"></span>
+            <span class="status-text">Ready</span>
+        </div>
+    </div>
+
+    <!-- Main Console Interface -->
+    <div class="console-container">
+        <!-- Game Library Section -->
+        <div class="game-library">
+            <div class="section-header">
+                <h2>🎯 Game Library</h2>
+                <div class="library-stats">
+                    <span id="gameCount">16 Games</span>
+                </div>
+            </div>
+            
+            <div class="games-grid" id="gamesGrid"><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/anyview.png" alt="Anyview" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Anyview</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/kybc6.png" alt="Asphalt 6" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Asphalt 6</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/pvz.png" alt="Plants vs Zombies" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Plants vs Zombies</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/ckxt3.png" alt="Assassin's Creed 3" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Assassin's Creed 3</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/kxnc.png" alt="Happy Farm" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Happy Farm</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/rf18.png" alt="Real Football 18" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Real Football 18</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/BounceTales.png" alt="Bounce Tales" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Bounce Tales</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/jxlls.png" alt="Rally Championship" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Rally Championship</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/ddz.png" alt="Landlord" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Landlord</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/gta.png" alt="GTA 5" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>GTA 5</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/tyty.png" alt="Doodle Jump" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Doodle Jump</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/chess.png" alt="Chinese Chess" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Chinese Chess</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/sim3.png" alt="The Sims 3" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>The Sims 3</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/kxnckr.png" alt="Happy Farm KR" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Happy Farm KR</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/dragon.png" alt="Jurassic Park" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Jurassic Park</h3>
+                    </div>
+                </div><div class="game-card">
+                    <div class="game-thumbnail">
+                        <img src="img/WheresMyWater.png" alt="Where's My Water" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <h3>Where's My Water</h3>
+                    </div>
+                </div></div>
+        </div>
+
+        <!-- Control Panel Section -->
+        <div class="control-panel">
+            <div class="section-header">
+                <h2>⚙️ Console Settings</h2>
+            </div>
+            
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <label>Display Resolution</label>
+                    <select id="canvasSize" class="console-select">
+                        <option value="size-240x320">240×320 (Classic)</option>
+                        <option value="size-320x240">320×240 (Wide)</option>
+                        <option value="size-360x640">360×640 (HD)</option>
+                        <option value="size-640x360">640×360 (HD Wide)</option>
+                        <option value="size-no" selected="">Unlimited</option>
+                    </select>
+                </div>
+
+                <div class="setting-group full-width">
+                    <label>Local Games</label>
+                    <select id="localjars" class="console-select"><option value="">No local games</option><option value="Sonic &amp; SEGA All-Stars Racing.jar">Sonic &amp; SEGA All-Stars Racing.jar</option><option value="Sonic the Hedgehog Part 1.jar">Sonic the Hedgehog Part 1.jar</option></select>
+                </div>
+            </div>
+
+            <div class="action-buttons">
+                <button class="console-btn primary" onclick="uploadGame()">
+                    📁 Upload Game
+                </button>
+                <button class="console-btn secondary" onclick="loadLocalGame()">
+                    ▶️ Play Local
+                </button>
+                <button class="console-btn danger" onclick="deleteLocalGame()">
+                    🗑️ Delete Local
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- File Upload (Hidden) -->
+    <input id="jarFileupload" accept=".jar" type="file" style="display: none;">
+
+    <!-- Hidden select elements for screen scale and gamepad (fixed values) -->
+    <select id="gamepadSize" style="display: none;">
+        <option value="gamepad-0">Disabled</option>
+        <option value="gamepad-1" selected="">Small</option>
+        <option value="gamepad-2">Medium</option>
+        <option value="gamepad-3">Large</option>
+        <option value="gamepad-4">Extra Large</option>
+    </select>
+
+    <select id="gameresize" style="display: none;">
+        <option value="resize-1" selected="">1x</option>
+        <option value="resize-1x5">1.5x</option>
+        <option value="resize-2">2x</option>
+        <option value="resize-2x5">2.5x</option>
+        <option value="resize-3">3x</option>
+    </select>
+
+    <!-- Original emulator elements (hidden by default) -->
+    <div id="pageContainer" style="display: none;">
+        <pre id="consoleContainer"></pre>
+        <div id="profilerContainer">
+            <div id="profilerToolbar">
+                <div class="toolbarLabel">Profiler <span id="profilerMessage" class="toolbarMessage">6 Seconds</span></div>
+                <div id="profilerButtons">
+                    <div id="profilerStartStop">Start</div>
+                    <div id="profilerAdjustHeight">Height</div>
+                </div>
+            </div>
+            <div id="profiler">
+                <div id="profileList"></div>
+                <div id="profilePanel"></div>
+            </div>
+        </div>
+    </div>
+
+    <pre id="raw-console" style="display: none"></pre>
+
+    <div id="display-container" style="display: none;">
+        <div id="display">
+            <section id="sidebar" data-type="sidebar" style="display:none">
+                <header><h1>Menu</h1></header>
+                <nav><ul></ul></nav>
+            </section>
+            <section id="drawer" role="region">
+                <header style="display:none">
+                    <a href="#"><span class="icon icon-menu">hide sidebar</span></a>
+                    <a id="header-drawer-button" href="#drawer"><span class="icon icon-menu">show sidebar</span></a>
+                    <menu id="header-ok-button" type="toolbar" style="display:none"><button>√</button></menu>
+                    <h1 id="display_title"></h1>
+                </header>
+                <div id="main" role="main">
+                    <canvas id="canvas" height="0" width="0" style="height: 0px; width: 0px; top: 0px;"></canvas>
+                    <input id="password-editor" class="text-editor" type="password">
+                    <input id="tel-editor" class="text-editor" type="tel">
+                    <input id="number-editor" class="text-editor" type="number">
+                    <input id="email-editor" class="text-editor" type="email">
+                    <input id="url-editor" class="text-editor" type="url">
+                    <div id="textarea-editor" class="text-editor" contenteditable="true"></div>
+                    <div id="hidden-textarea-editor" class="text-editor"></div>
+                    <button id="back-button">Back</button>
+                </div>
+            </section>
+
+            <div id="gamepad" onselectstart="return false">
+                <div id="padcontent">
+                    <button>1</button><button>2</button><button>3</button>
+                    <button>L</button><div></div><button>R</button>
+                </div>
+                <div id="padcontent">
+                    <button>4</button><button>5</button><button>6</button>
+                    <div></div><button>up</button>
+                </div>
+                <div id="padcontent">
+                    <button>7</button><button>8</button><button>9</button>
+                    <button>left</button><button>OK</button><button>right</button>
+                </div>
+                <div id="padcontent">
+                    <button>*</button><button>0</button><button>#</button>
+                    <div></div><button>down</button>
+                </div>
+            </div>
+
+            <!-- Dialog elements -->
+            
+
+            
+
+            <div id="exit-screen" class="screen"></div>
+            <div id="background-screen"></div>
+
+            <form role="dialog" data-type="confirm" class="lcdui-alert" id="lcdui-alert" style="display: none">
+                <section>
+                    <h1 class="title"></h1>
+                    <p class="text"></p>
+                    <p style="border-top: 0"><progress style="display: none"></progress></p>
+                </section>
+                <menu>
+                    <button class="button0" style="display: none"></button>
+                    <button class="button1" style="display: none"></button>
+                </menu>
+            </form>
+
+            <form role="dialog" data-type="confirm" class="sms-listener-prompt" id="sms-listener-prompt" style="display: none">
+                <section>
+                    <h1>SMS Verification</h1>
+                    <p class="verificationText"></p>
+                    <input type="text" placeholder="Type SMS Here">
+                    <p class="timeLeft"></p>
+                    <progress class="timeLeftBar" value="0" max="100"></progress>
+                </section>
+                <menu>
+                    <button class="cancel">Cancel</button>
+                    <button class="recommend">Done</button>
+                </menu>
+            </form>
+
+            <form role="dialog" data-type="confirm" class="nokia-fileui-prompt" id="nokia-fileui-prompt" style="display: none">
+                <section>
+                    <h1>Select a file</h1>
+                    <p><input type="file" name="nokia-fileui-file">
+                </p></section>
+                <menu>
+                    <button class="cancel">Cancel</button>
+                    <button class="recommend">Done</button>
+                </menu>
+            </form>
+
+            <form role="dialog" data-type="confirm" class="download-failure-dialog" id="download-failure-dialog" style="display: none">
+                <section>
+                    <h1 class="download-dialog-text">Download failure</h1>
+                    <p>The download of game failed. Press <i>Retry</i> to try again.</p>
+                </section>
+                <menu>
+                    <button class="recommend">Retry</button>
+                </menu>
+            </form>
+        </div>
+        
+        <div id="settings">
+            <section>
+                <table id="counters">
+                    <tbody><tr><td>Bytecode:</td><td><span id="bytecodeCount"></span></td></tr>
+                    <tr><td>Compiled:</td><td><span id="compiledCount"></span></td></tr>
+                    <tr><td>Interpreter:</td><td><span id="interpreterCount"></span></td></tr>
+                    <tr><td>OSR:</td><td><span id="onStackReplacementCount"></span></td></tr>
+                    <tr><td>Unwind:</td><td><span id="unwindCount"></span></td></tr>
+                    <tr><td>Preemption:</td><td><span id="preemptionCount"></span></td></tr>
+                </tbody></table>
+            </section>
+        </div>
+    </div>
+
+    <script>
+        // Game library data
+const gameLibrary = [
+    { 
+        name: "Anyview Reader (by ismyway, MIT License)", 
+        jarName: "Anyview4.0.jar", 
+        midletClassName: "com.ismyway.anyview.Anyview", 
+        picPath: "img/anyview.png", 
+    },
+    { 
+        name: "Bounce Tales Open Source (GPL-2.0, Community Project)", 
+        jarName: "BounceTales.jar", 
+        midletClassName: "RMIDlet", 
+        picPath: "img/BounceTales.png", 
+    },
+    { 
+        name: "Chinese Chess (GPL-2.0, Open Source)", 
+        jarName: "chess.jar", 
+        midletClassName: "com.chess.Tmpmidlet", 
+        picPath: "img/chess.png", 
+    },
+
+
+
+];
+
+
+
+
+        // Configuration management
+        const config = {
+            data: {
+                canvasSize: 4,
+                gamepadSize: 1, // Fixed to Small (gamepad-1)
+                gameresize: 0, // Fixed to 1x (resize-1)
+                gameindex: 0,
+            },
+            
+            init() {
+                if (localStorage["consoleConfig"]) {
+                    const saved = JSON.parse(localStorage["consoleConfig"]);
+                    // Only load canvasSize and gameindex from saved data
+                    this.data.canvasSize = saved.canvasSize || 4;
+                    this.data.gameindex = saved.gameindex || 0;
+                    // Keep gamepadSize and gameresize fixed
+                }
+            },
+            
+            save() {
+                // Only save canvasSize and gameindex
+                const saveData = {
+                    canvasSize: this.data.canvasSize,
+                    gameindex: this.data.gameindex
+                };
+                localStorage["consoleConfig"] = JSON.stringify(saveData);
+            },
+            
+            get(key) {
+                return this.data[key];
+            },
+            
+            set(key, value) {
+                // Only allow changing canvasSize and gameindex
+                if (key === 'canvasSize' || key === 'gameindex') {
+                    this.data[key] = value;
+                    this.save();
+                }
+            }
+        };
+
+        // Initialize interface
+        function initializeConsole() {
+            config.init();
+            loadGameLibrary();
+            loadSettings();
+            setupEventListeners();
+            refreshLocalGames();
+        }
+
+        // Load game library
+        function loadGameLibrary() {
+            const gamesGrid = document.getElementById('gamesGrid');
+            gamesGrid.innerHTML = '';
+            
+            gameLibrary.forEach(game => {
+                const gameCard = document.createElement('div');
+                gameCard.className = 'game-card';
+                gameCard.innerHTML = `
+                    <div class="game-thumbnail">
+                        <img src="${game.picPath}" alt="${game.name}" onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNjQiIGhlaWdodD0iNjQiIHZpZXdCb3g9IjAgMCA2NCA2NCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiBmaWxsPSIjMzMzIiByeD0iOCIvPgo8cGF0aCBkPSJNMjAgMzJMMzIgMjBMNDQgMzJMMzIgNDRMMjAgMzJaIiBmaWxsPSIjNjY2Ii8+Cjwvc3ZnPg=='">
+                        <div class="game-overlay">
+                            <div class="play-btn">▶</div>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <p style="
+                            font-family: sans-serif;
+                            font-weight: 500;
+                        ">${game.name}</p>
+                    </div>
+                `;
+                
+                gameCard.addEventListener('click', () => playGame(game.jarName, game.midletClassName));
+                gamesGrid.appendChild(gameCard);
+            });
+        }
+
+        // Load settings from config
+        function loadSettings() {
+            document.getElementById('canvasSize').selectedIndex = config.get('canvasSize');
+            // Set hidden elements to fixed values
+            document.getElementById('gamepadSize').selectedIndex = config.get('gamepadSize');
+            document.getElementById('gameresize').selectedIndex = config.get('gameresize');
+        }
+
+        // Setup event listeners
+        function setupEventListeners() {
+            document.getElementById('jarFileupload').addEventListener('change', handleFileUpload);
+            
+            // Only save settings for canvasSize
+            document.getElementById('canvasSize').addEventListener('change', function() {
+                config.set('canvasSize', this.selectedIndex);
+            });
+        }
+
+        // File upload handler
+        function handleFileUpload(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+            
+            if (!file.name.toLowerCase().endsWith('.jar')) {
+                showNotification('Only .jar files are supported!', 'error');
+                return;
+            }
+            
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                if (typeof JARStore !== 'undefined') {
+                    JARStore.installJAR(file.name, e.target.result).then(
+                        () => {
+                            showNotification(`${file.name} installed successfully!`, 'success');
+                            refreshLocalGames();
+                        },
+                        (error) => {
+                            showNotification(`Failed to install ${file.name}`, 'error');
+                        }
+                    );
+                } else {
+                    showNotification('JAR storage not available', 'error');
+                }
+            };
+            reader.readAsArrayBuffer(file);
+            event.target.value = '';
+        }
+
+        // Refresh local games list
+        function refreshLocalGames() {
+            if (typeof JARStore === 'undefined') return;
+            
+            JARStore.getAll().then(files => {
+                const localJars = document.getElementById('localjars');
+                localJars.innerHTML = '<option value="">No local games</option>';
+                
+                files.forEach((file, index) => {
+                    const option = new Option(file.jarName, file.jarName);
+                    localJars.add(option);
+                });
+                
+                if (files.length > 0) {
+                    const savedIndex = config.get('gameindex');
+                    localJars.selectedIndex = savedIndex < files.length ? savedIndex : 0;
+                }
+            }).catch(err => {
+                console.error('Failed to load local games:', err);
+            });
+        }
+
+        // Play game function
+        function playGame(jarName, midletClassName, isLocal = false) {
+            const params = new URLSearchParams();
+            
+            if (isLocal) {
+                params.set('localjar', jarName);
+            } else {
+                params.set('jars', `jar/${jarName}`);
+                params.set('midletClassName', midletClassName);
+            }
+            
+            // Add fixed settings
+            const gamepadSize = document.getElementById('gamepadSize');
+            const canvasSize = document.getElementById('canvasSize');
+            const gameresize = document.getElementById('gameresize');
+            
+            // Always enable small gamepad
+            params.set('gamepad', '1');
+            params.set('gamepadSize', gamepadSize.value);
+            
+            if (canvasSize.value) {
+                params.set('canvasSize', canvasSize.value);
+            }
+            
+            // Always set resize to 1x
+            params.set('gameresize', gameresize.value);
+            
+            // Save current settings (only canvasSize)
+            config.set('canvasSize', canvasSize.selectedIndex);
+            
+            window.location.href = `main.html?${params.toString()}`;
+        }
+
+        // Button functions
+        function uploadGame() {
+            document.getElementById('jarFileupload').click();
+        }
+
+        function loadLocalGame() {
+            const localJars = document.getElementById('localjars');
+            if (localJars.selectedIndex <= 0) {
+                showNotification('Please select a local game first!', 'warning');
+                return;
+            }
+            
+            const jarName = localJars.value;
+            config.set('gameindex', localJars.selectedIndex);
+            playGame(jarName, '', true);
+        }
+
+        function deleteLocalGame() {
+            const localJars = document.getElementById('localjars');
+            if (localJars.selectedIndex <= 0) {
+                showNotification('Please select a game to delete!', 'warning');
+                return;
+            }
+            
+            const jarName = localJars.value;
+            if (confirm(`Are you sure you want to delete "${jarName}"?`)) {
+                if (typeof JARStore !== 'undefined') {
+                    JARStore.deleteJar(jarName).then(
+                        () => {
+                            showNotification(`${jarName} deleted successfully!`, 'success');
+                            refreshLocalGames();
+                        },
+                        (error) => {
+                            showNotification(`Failed to delete ${jarName}`, 'error');
+                        }
+                    );
+                }
+            }
+        }
+
+        // Notification system
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.textContent = message;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.classList.add('show');
+            }, 100);
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+                setTimeout(() => notification.remove(), 300);
+            }, 3000);
+        }
+
+        // Initialize when page loads
+        document.addEventListener('DOMContentLoaded', initializeConsole);
+    </script>
+
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            color: #ffffff;
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
+
+        /* Console Header */
+        .console-header {
+            background: linear-gradient(90deg, #1e1e3f 0%, #2a2a5a 100%);
+            padding: 1rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #4a4a8a;
+            box-shadow: 0 2px 20px rgba(74, 74, 138, 0.3);
+        }
+
+        .console-logo {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .logo-icon {
+            font-size: 2rem;
+            background: linear-gradient(45deg, #ff6b6b, #4ecdc4);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: pulse 2s ease-in-out infinite alternate;
+        }
+
+        .console-logo h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, #ffffff, #b8b8ff);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .console-status {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .status-indicator {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: #4ecdc4;
+            box-shadow: 0 0 10px #4ecdc4;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        .status-text {
+            color: #b8b8ff;
+            font-weight: 500;
+        }
+
+        /* Main Console Container */
+        .console-container {
+            padding: 2rem;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 350px;
+            gap: 2rem;
+        }
+
+        /* Section Headers */
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid #4a4a8a;
+        }
+
+        .section-header h2 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .library-stats {
+            background: rgba(74, 74, 138, 0.3);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+            color: #b8b8ff;
+        }
+
+        /* Games Grid */
+        .games-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1.5rem;
+        }
+
+.game-card {
+    background: linear-gradient(145deg, #2a2a5a42, #1e1e3f47);
+    border-radius: 0px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 2px solid transparent;
+    position: relative;
+}
+
+        .game-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            border-color: #4ecdc4;
+            box-shadow: 0 10px 30px rgba(78, 205, 196, 0.3);
+        }
+
+        .game-thumbnail {
+            position: relative;
+            aspect-ratio: 1;
+            overflow: hidden;
+        }
+
+        .game-thumbnail img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s ease;
+        }
+
+        .game-card:hover .game-thumbnail img {
+            transform: scale(1.1);
+        }
+
+        .game-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(255, 107, 107, 0.8), rgba(78, 205, 196, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .game-card:hover .game-overlay {
+            opacity: 1;
+        }
+
+        .play-btn {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.9);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            color: #333;
+            font-weight: bold;
+        }
+
+        .game-info {
+            padding: 1rem;
+        }
+
+        .game-info h3 {
+            font-size: 1rem;
+            margin-bottom: 0.25rem;
+            color: #ffffff;
+        }
+
+
+        /* Control Panel */
+.control-panel {
+    width: 500px;
+    background: linear-gradient(145deg, #2a2a5a, #1e1e3f);
+    border-radius: 15px;
+    padding: 1.5rem;
+    border: 2px solid #4a4a8a;
+    height: fit-content;
+    z-index: 1;
+    opacity: 0.5;
+}
+
+        .settings-grid {
+            display: grid;
+            gap: 1.5rem;
+        }
+
+        .setting-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .setting-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .setting-group label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #b8b8ff;
+        }
+
+        .console-select {
+            background: linear-gradient(145deg, #1e1e3f, #2a2a5a);
+            border: 2px solid #4a4a8a;
+            border-radius: 8px;
+            padding: 0.75rem;
+            color: #ffffff;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .console-select:hover,
+        .console-select:focus {
+            border-color: #4ecdc4;
+            box-shadow: 0 0 10px rgba(78, 205, 196, 0.3);
+            outline: none;
+        }
+
+        .console-select option {
+            background: #1e1e3f;
+            color: #ffffff;
+        }
+
+        /* Action Buttons */
+        .action-buttons {
+            display: grid;
+            gap: 1rem;
+            margin-top: 2rem;
+        }
+
+        .console-btn {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .console-btn.primary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .console-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .console-btn.secondary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .console-btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .console-btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .console-btn.danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .notification.warning {
+            background: linear-gradient(45deg, #ffa726, #ff9800);
+        }
+
+        .notification.info {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #4ecdc4; }
+            100% { box-shadow: 0 0 20px #4ecdc4, 0 0 30px #4ecdc4; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .console-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .console-header {
+                padding: 1rem;
+            }
+
+            .console-logo h1 {
+                font-size: 1.4rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+
+            .game-library{
+                position: static;
+    width: unset;
+            }
+
+            .console-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }}
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .game-info h3 {
+                font-size: 0.9rem;
+            }
+
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+        .console-btn {
+            padding: 0.875rem 1.5rem;
+            border: none;
+            border-radius: 10px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .console-btn.primary {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            color: white;
+            box-shadow: 0 4px 15px rgba(78, 205, 196, 0.3);
+        }
+
+        .console-btn.primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(78, 205, 196, 0.4);
+        }
+
+        .console-btn.secondary {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .console-btn.secondary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
+        }
+
+        .console-btn.danger {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+            color: white;
+            box-shadow: 0 4px 15px rgba(255, 107, 107, 0.3);
+        }
+
+        .console-btn.danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Notification System */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            color: white;
+            font-weight: 600;
+            z-index: 1000;
+            transform: translateX(400px);
+            transition: transform 0.3s ease;
+            max-width: 300px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.success {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+        }
+
+        .notification.error {
+            background: linear-gradient(45deg, #ff6b6b, #ee5a52);
+        }
+
+        .notification.warning {
+            background: linear-gradient(45deg, #ffa726, #ff9800);
+        }
+
+        .notification.info {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+        }
+
+        /* Animations */
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.1); }
+        }
+
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #4ecdc4; }
+            100% { box-shadow: 0 0 20px #4ecdc4, 0 0 30px #4ecdc4; }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1024px) {
+            .console-container {
+                grid-template-columns: 1fr;
+                padding: 1rem;
+            }
+
+            .console-header {
+                padding: 1rem;
+            }
+
+            .console-logo h1 {
+                font-size: 1.4rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .console-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+                gap: 0.75rem;
+            }
+
+            .game-info h3 {
+                font-size: 0.9rem;
+            }
+
+            .action-buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .notification {
+                right: 10px;
+                left: 10px;
+                max-width: none;
+                transform: translateY(-100px);
+            }
+
+            .notification.show {
+                transform: translateY(0);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .console-container {
+                padding: 0.5rem;
+            }
+
+            .control-panel {
+                padding: 1rem;
+            }
+
+            .games-grid {
+                grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+                gap: 0.5rem;
+            }
+
+            .game-info {
+                padding: 0.75rem;
+            }
+
+            .console-btn {
+                padding: 0.75rem 1rem;
+                font-size: 0.85rem;
+            }
+        }
+
+        /* Loading States */
+        .loading {
+            position: relative;
+            overflow: hidden;
+        }
+
+        .loading::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            animation: loading 1.5s infinite;
+        }
+
+        @keyframes loading {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Scrollbar Styling */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: #1e1e3f;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(45deg, #4ecdc4, #44a08d);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: linear-gradient(45deg, #44a08d, #4ecdc4);
+        }
+
+        /* Enhanced Game Card Effects */
+        .game-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(45deg, rgba(78, 205, 196, 0.1), rgba(255, 107, 107, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .game-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Focus States for Accessibility */
+        .console-btn:focus,
+        .game-card:focus {
+            outline: 2px solid #4ecdc4;
+            outline-offset: 2px;
+        }
+
+        /* High contrast mode support */
+        @media (prefers-contrast: high) {
+            .game-card {
+                border: 2px solid #ffffff;
+            }
+            
+            .console-select {
+                border-color: #ffffff;
+            }
+        }
+
+        /* Reduced motion support */
+        @media (prefers-reduced-motion: reduce) {
+            .game-card,
+            .console-btn,
+            .notification,
+            .logo-icon,
+            .status-indicator {
+                transition: none;
+                animation: none;
+            }
+        }
+
+        /* Dark theme enhancements */
+        /* @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(267deg, #052543 0%, #2a1d6d 50%, #44249d 100%);
+            }
+        } */
+    </style>
+
+    <!-- دعم السكرول الافقي بالماوس -->
+
+    <script>
+
+// Edge horizontal auto-scroll — paste into the browser console
+(function(){
+  const edgeWidth = 120;    // عرض "منطقة الحافة" px — كلما كبر ازدادت حساسية الحافة
+  const maxSpeed = 40;      // أكبر سرعة تمرير (px/frame)
+  const power = 0.85;       // منحنى السرعة (0..1) — أقل = أسرع الاستجابة عند الحافة
+  const se = document.scrollingElement || document.documentElement;
+
+  let mouseX = 0;
+  let dir = 0; // -1 left, 0 none, 1 right
+  let rafId = null;
+  let running = true;
+
+  function calcIntensity() {
+    if (dir === 1) {
+      const d = Math.max(0, edgeWidth - (window.innerWidth - mouseX));
+      return Math.min(1, d / edgeWidth);
+    } else if (dir === -1) {
+      const d = Math.max(0, edgeWidth - mouseX);
+      return Math.min(1, d / edgeWidth);
+    }
+    return 0;
+  }
+
+  function loop() {
+    if (!running) return;
+    const intensity = calcIntensity();
+    if (intensity > 0) {
+      // سرعة تعتمد على شدة الاقتراب من الحافة، مع تطبيق منحنى طفيف
+      const speed = Math.pow(intensity, power) * maxSpeed;
+      se.scrollLeft += dir * speed;
+    }
+    rafId = requestAnimationFrame(loop);
+  }
+
+  function onMove(e){
+    mouseX = e.clientX;
+    if (mouseX >= window.innerWidth - edgeWidth) dir = 1;
+    else if (mouseX <= edgeWidth) dir = -1;
+    else dir = 0;
+  }
+
+  function onLeave(){
+    dir = 0;
+  }
+
+  function stop(){
+    running = false;
+    if (rafId) cancelAnimationFrame(rafId);
+    window.removeEventListener('mousemove', onMove);
+    window.removeEventListener('mouseleave', onLeave);
+    window.removeEventListener('blur', onLeave);
+    window.removeEventListener('keydown', escHandler);
+    console.log('Edge horizontal scroll stopped.');
+  }
+
+  function escHandler(e){
+    if (e.key === 'Escape') stop();
+  }
+
+  window.addEventListener('mousemove', onMove);
+  window.addEventListener('mouseleave', onLeave);
+  window.addEventListener('blur', onLeave);
+  window.addEventListener('keydown', escHandler);
+
+  loop();
+
+  // expose stop function so you can call it from console:
+  window.edgeScrollStop = stop;
+  console.log('Edge horizontal scroll enabled. Call edgeScrollStop() to stop, or press Escape.');
+})();
+
+
+    </script>
+
+<footer style="position: relative; top: 30px; width: 100%; text-align:center; padding:20px; font-size:0.9em; background: #00000042; line-height:1.6;">
+  <p style="filter: grayscale(1); margin:0;">
+    © 2025 N-STATION — This project is licensed under 
+    <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU AGPLv3</a>,
+    except for the PlayStation 4 UI background licensed under 
+    <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>. 
+    Full source code is available 
+    <a href="https://github.com/sepgamer999-ux/N-STATION" target="_blank" rel="noopener noreferrer">here</a>.
+  </p>
+
+  <p style="filter: grayscale(1); margin-top:15px;">
+    ⚠️ <strong>Legal Notice:</strong> The project contains only legally open-source games.  
+    Commercial games (e.g., old Nokia games or <em>Sonic</em>) are **not included**.  
+    You can download them for personal use from official archives:  
+    <a href="https://archive.org/details/NokiaJavaGames" target="_blank" rel="noopener noreferrer">Nokia Java Games</a> | 
+    <a href="https://archive.org/download/all-available-sonic-java-games" target="_blank" rel="noopener noreferrer">Sonic Java Games</a>.
+  </p>
+</footer>
+
+
+
+</body></html>

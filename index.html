@@ -879,7 +879,7 @@ const gameLibrary = [
         /* Games Grid */
         .games-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
             gap: 1.5rem;
         }
 
@@ -959,7 +959,10 @@ const gameLibrary = [
 
 
         /* Control Panel */
-.control-panel {
+.control-panel{
+    position: relative;
+    top: -20px;
+    scale: 0.9;
     width: 500px;
     background: linear-gradient(145deg, #2a2a5a, #1e1e3f);
     border-radius: 15px;
@@ -1138,7 +1141,7 @@ const gameLibrary = [
             }
 
             .games-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                 gap: 1rem;
             }
         }
@@ -1157,7 +1160,7 @@ const gameLibrary = [
             }}
 
             .games-grid {
-                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
                 gap: 0.75rem;
             }
 
@@ -1523,14 +1526,14 @@ const gameLibrary = [
 
     </script>
 
-<footer style="position: relative; top: 30px; width: 100%; text-align:center; padding:20px; font-size:0.9em; background: #00000042; line-height:1.6;">
+<footer style="position: relative;top: -50px;width: 100%;text-align:center;padding:20px;font-size:0.9em;background: #00000042;line-height:1.6;">
   <p style="filter: grayscale(1); margin:0;">
     © 2025 N-STATION — This project is licensed under 
     <a href="https://www.gnu.org/licenses/agpl-3.0.html" target="_blank" rel="noopener noreferrer">GNU AGPLv3</a>,
     except for the PlayStation 4 UI background licensed under 
     <a href="https://opensource.org/licenses/MIT" target="_blank" rel="noopener noreferrer">MIT License</a>. 
     Full source code is available 
-    <a href="https://github.com/sepgamer999-ux/N-STATION" target="_blank" rel="noopener noreferrer">here</a>.
+    <a href="/source" target="_blank" rel="noopener noreferrer">here</a>.
   </p>
 
   <p style="filter: grayscale(1); margin-top:15px;">
@@ -1541,6 +1544,7 @@ const gameLibrary = [
     <a href="https://archive.org/download/all-available-sonic-java-games" target="_blank" rel="noopener noreferrer">Sonic Java Games</a>.
   </p>
 </footer>
+
 
 
 

@@ -1,0 +1,195 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <style>
+    body {
+      margin: 0;
+      font-family: sans-serif;
+      color: white;
+      text-align: center;
+    }
+
+    .video-bg {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      z-index: -2;
+    }
+
+    .video-bg iframe {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 100vw;
+      height: 56.25vw; /* 16:9 */
+      min-width: 177.77vh;
+      min-height: 100vh;
+      transform: translate(-50%, -50%);
+      border: none;
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0);
+      z-index: -1;
+      transition: background 0.2s ease;
+      pointer-events: none;
+    }
+
+    .controls {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: rgba(0,0,0,0.6);
+      padding: 10px 20px;
+      border-radius: 8px;
+      color: white;
+      font-family: sans-serif;
+    }
+
+    .controls label {
+      margin: 0 10px;
+    }
+
+    .login_page {
+      padding-top: 120px;
+    }
+
+    .login_page_header h1 {
+      color: white;
+      font-size: 28px;
+      margin-bottom: 30px;
+    }
+
+    .devices {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      justify-items: center;
+      padding: 20px;
+    }
+
+    .devices a {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 220px;
+      width: 220px;
+      background: rgba(0,0,0,0.5);
+      border-radius: 12px;
+      color: white;
+      font-size: 20px;
+      text-decoration: none;
+      transition: transform 0.2s, background 0.3s;
+    }
+
+    .devices a:hover {
+      transform: scale(1.05);
+      background: rgba(255,255,255,0.1);
+    }
+
+    .devices img {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Background video -->
+  <div class="video-bg">
+    <iframe src="https://www.youtube.com/embed/ZuUmT4XL-bQ?autoplay=1&mute=1&loop=1&playlist=ZuUmT4XL-bQ&controls=0&showinfo=0&rel=0"
+    allow="autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+  </div>
+
+  <!-- Overlay -->
+  <div class="overlay" id="overlay"></div>
+
+  <!-- Controls -->
+  <div class="controls">
+    <label>Color: <input type="color" id="colorPicker" value="#ff0000"></label>
+    <label>Opacity: <input type="range" id="opacityRange" min="0" max="100" value="0"></label>
+  </div>
+
+  <!-- Login Page -->
+  <div class="login_page">
+    <div class="login_page_header">
+      <h1>Which device do you want to emulate?</h1>
+    </div>
+
+    <div class="devices">
+      <a href="nokia_games_emulator.html">
+        <img src="nokia.png" alt="Nokia-era phones">
+        Nokia-era Java phones
+      </a>
+      <a href="other_devices.html">
+        <img src="other.png" alt="Other gaming devices">
+        Other gaming devices
+      </a>
+
+<a href="devices%20from%20third%20party%20web%20sites.html">
+        <img src="other_third_party.png" alt="Other gaming devices">Other gaming devices from third-party sites</a>
+
+    </div>
+  </div>
+
+  <script>
+    const overlay = document.getElementById("overlay");
+    const colorPicker = document.getElementById("colorPicker");
+    const opacityRange = document.getElementById("opacityRange");
+
+    // Update overlay background
+    function updateOverlay(save = true) {
+      const color = colorPicker.value;
+      const opacity = opacityRange.value / 100;
+      overlay.style.background = hexToRgba(color, opacity);
+
+      // Save settings to localStorage
+      if (save) {
+        localStorage.setItem("overlayColor", color);
+        localStorage.setItem("overlayOpacity", opacityRange.value);
+      }
+    }
+
+    function hexToRgba(hex, alpha) {
+      const r = parseInt(hex.substr(1, 2), 16);
+      const g = parseInt(hex.substr(3, 2), 16);
+      const b = parseInt(hex.substr(5, 2), 16);
+      return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+    }
+
+    // Restore settings from localStorage
+    function loadSettings() {
+      const savedColor = localStorage.getItem("overlayColor");
+      const savedOpacity = localStorage.getItem("overlayOpacity");
+
+      if (savedColor) {
+        colorPicker.value = savedColor;
+      }
+      if (savedOpacity) {
+        opacityRange.value = savedOpacity;
+      }
+
+      updateOverlay(false); // apply without saving again
+    }
+
+    // Event listeners
+    colorPicker.addEventListener("input", () => updateOverlay());
+    opacityRange.addEventListener("input", () => updateOverlay());
+
+    // Load saved settings on startup
+    loadSettings();
+  </script>
+
+</body>
+</html>

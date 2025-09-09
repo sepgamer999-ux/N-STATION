@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Game Player - All Systems</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <meta http-equiv="Content-Security-Policy" content="frame-src https://www.youtube.com;">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            color: white;
+            overflow-x: hidden;
+            background: #000;
+        }
+
+        /* Video Background */
+        .video-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            z-index: -2;
+        }
+
+        .video-bg iframe {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 100vw;
+            height: 56.25vw;
+            min-width: 177.77vh;
+            min-height: 100vh;
+            transform: translate(-50%, -50%);
+            border: none;
+        }
+
+        /* Color Overlay */
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0);
+            z-index: -1;
+            transition: background 0.3s ease;
+        }
+
+        /* Main Content */
+        .content {
+            position: relative;
+            z-index: 1;
+            padding: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Header */
+        .header {
+            display: flex;
+            align-items: center;
+            padding: 20px 0;
+            margin-bottom: 20px;
+            border-bottom: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .logo {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-template-rows: repeat(2, 1fr);
+            width: 60px;
+            height: 60px;
+            gap: 5px;
+            margin-right: 20px;
+        }
+
+        .logo-square {
+            width: 20px;
+            height: 20px;
+            border: 2px solid white;
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: bold;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Main Player Section */
+        .player-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+            padding: 30px 0;
+        }
+
+        .player-card {
+            background: rgba(20, 20, 30, 0.9);
+            border-radius: 15px;
+            padding: 30px;
+            width: 100%;
+            max-width: 1000px;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5);
+        }
+
+
+        .player-icon {
+            font-size: 3.5rem;
+            color: #74b9ff;
+            margin-bottom: 15px;
+        }
+
+        .player-title {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .player-subtitle {
+            color: #aaa;
+            font-size: 1.1rem;
+        }
+
+        /* Game Settings */
+        .game-settings {
+            margin-bottom: 30px;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 900px) {
+            .game-settings {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .setting-group {
+            margin-bottom: 20px;
+        }
+
+        .setting-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: bold;
+            color: #ddd;
+            font-size: 1.1rem;
+        }
+
+        .setting-group input, .setting-group select {
+            width: 100%;
+            padding: 15px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .setting-group input:focus, .setting-group select:focus {
+            outline: none;
+            border-color: #6c5ce7;
+            box-shadow: 0 0 0 3px rgba(108, 92, 231, 0.3);
+        }
+
+        .dropzone {
+            border: 2px dashed #74b9ff;
+            border-radius: 10px;
+            padding: 30px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: rgba(116, 185, 255, 0.05);
+            margin-bottom: 20px;
+            grid-column: 1 / -1;
+        }
+
+        .dropzone:hover {
+            background: rgba(116, 185, 255, 0.1);
+            border-color: #6c5ce7;
+        }
+
+        .dropzone i {
+            font-size: 3rem;
+            color: #74b9ff;
+            margin-bottom: 15px;
+        }
+
+        .dropzone p {
+            margin: 10px 0;
+            color: #ccc;
+        }
+
+        .file-name {
+            margin-top: 15px;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 8px;
+            display: none;
+            text-align: center;
+            font-size: 0.9rem;
+            grid-column: 1 / -1;
+        }
+
+        /* Game Player */
+        .game-view {
+            width: 100%;
+            height: 500px;
+            background: #000;
+            border-radius: 10px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            margin-top: 30px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        #game-container {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .game-placeholder {
+            text-align: center;
+            padding: 30px;
+            color: #636e72;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            z-index: 2;
+        }
+
+        .game-placeholder i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+        }
+
+        /* Background Controls */
+        .bg-controls {
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 10px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+            z-index: 10;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .control-group {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-group label {
+            font-size: 0.9rem;
+            color: #ddd;
+        }
+
+        .control-group input[type="color"] {
+            width: 40px;
+            height: 40px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background: transparent;
+        }
+
+        .control-group input[type="range"] {
+            width: 150px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .player-card {
+                padding: 20px;
+            }
+            
+            .player-title {
+                font-size: 1.5rem;
+            }
+            
+            .game-view {
+                height: 350px;
+            }
+            
+            .bg-controls {
+                flex-direction: column;
+                width: 90%;
+                bottom: 10px;
+            }
+        }
+
+        /* Loading Effects */
+        .loading {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #74b9ff;
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: rgba(46, 204, 113, 0.9);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            z-index: 1000;
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+
+        /* System Icons */
+        .system-icon {
+            width: 24px;
+            height: 24px;
+            display: inline-block;
+            margin-left: 8px;
+            vertical-align: middle;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 4px;
+            text-align: center;
+            line-height: 24px;
+            font-size: 12px;
+        }
+        
+        /* UI Improvements */
+        .system-info {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 10px;
+            border-radius: 8px;
+            margin-top: 10px;
+            font-size: 0.9rem;
+            color: #aaa;
+            grid-column: 1 / -1;
+        }
+    </style>
+</head>
+<body>
+    <!-- Video Background -->
+    <div class="video-bg">
+        <iframe src="https://www.youtube.com/embed/ZuUmT4XL-bQ?autoplay=1&mute=1&loop=1&playlist=ZuUmT4XL-bQ&controls=0&showinfo=0&rel=0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+    </div>
+
+    <!-- Color Overlay -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Notification -->
+    <div class="notification" id="notification"></div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Header -->
+        <div class="header">
+            <div class="logo">
+                <div class="logo-square"></div>
+                <div class="logo-square"></div>
+                <div class="logo-square"></div>
+                <div class="logo-square"></div>
+            </div>
+            <h1>Advanced Game Player - All Systems</h1>
+        </div>
+
+        <!-- Main Player -->
+        <div class="player-container">
+            <div class="player-card">
+
+                <div class="game-settings">
+                    <div class="setting-group">
+                        <label for="gameFile"><i class="fas fa-file-archive"></i> Select Game File</label>
+                        <div class="dropzone" id="dropzone">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                            <p>Drag your game file here or click to select</p>
+                            <p>Supports almost all game formats</p>
+                        </div>
+                        <input type="file" id="gameFile" hidden accept=".nes,.sfc,.smc,.gba,.gb,.gbc,.nds,.iso,.bin,.img,.cue,.zip,.7z,.pbp,.32x,.sms,.gg,.sg,.pce,.ngp,.ws,.a52,.j64,.lnx,.crt,.d64,.adf,.col,.ngc,.chd,.cso,.elf,.prx">
+                        <div class="file-name" id="fileName"></div>
+                    </div>
+                    
+                    <div class="setting-group">
+                        <label for="gameSystem"><i class="fas fa-microchip"></i> System</label>
+                        <select id="gameSystem">
+                            <option value="auto">Auto-detect (from extension)</option>
+                            <optgroup label="Nintendo">
+                                <option value="nes">NES (fceumm)</option>
+                                <option value="nestopia">NES (Nestopia)</option>
+                                <option value="snes">SNES (snes9x)</option>
+                                <option value="gb">Game Boy (gambatte)</option>
+                                <option value="gba">GBA (mgba)</option>
+                                <option value="vb">Virtual Boy (beetle_vb)</option>
+                                <option value="nds">Nintendo DS (melonds)</option>
+                                <option value="desmume2015">Nintendo DS (desmume2015)</option>
+                                <option value="desmume">Nintendo DS (desmume)</option>
+                                <option value="n64">Nintendo 64 (mupen64plus_next)</option>
+                                <option value="parallel-n64">Nintendo 64 (parallel-n64)</option>
+                            </optgroup>
+                            <optgroup label="Sega">
+                                <option value="segaMD">Sega Mega Drive/Genesis (genesis_plus_gx)</option>
+                                <option value="segaMS">Sega Master System (smsplus)</option>
+                                <option value="sega32x">Sega 32X (picodrive)</option>
+                                <option value="saturn">Sega Saturn (yabause)</option>
+                                <option value="gamegear">Sega Game Gear (genesis_plus_gx)</option>
+                            </optgroup>
+                            <optgroup label="Sony">
+                                <option value="psx">PlayStation (pcsx_rearmed)</option>
+                                <option value="mednafen_psx_hw">PlayStation (mednafen_psx_hw)</option>
+                                <option value="psp">PSP (ppsspp)</option>
+                            </optgroup>
+                            <optgroup label="Atari">
+                                <option value="a5200">Atari 5200 (a5200)</option>
+                                <option value="atari7800">Atari 7800 (prosystem)</option>
+                                <option value="atari2600">Atari 2600 (stella2014)</option>
+                                <option value="jaguar">Atari Jaguar (virtualjaguar)</option>
+                                <option value="lynx">Atari Lynx (handy)</option>
+                            </optgroup>
+                            <optgroup label="Arcade">
+                                <option value="arcade">Arcade (fbneo)</option>
+                                <option value="fbalpha2012_cps1">Arcade CPS1 (fbalpha2012_cps1)</option>
+                                <option value="fbalpha2012_cps2">Arcade CPS2 (fbalpha2012_cps2)</option>
+                                <option value="mame2003">MAME 2003 (mame2003)</option>
+                                <option value="mame2003_plus">MAME 2003 Plus (mame2003_plus)</option>
+                            </optgroup>
+                            <optgroup label="Other Systems">
+                                <option value="3do">3DO (opera)</option>
+                                <option value="pce">PC Engine/TurboGrafx-16 (mednafen_pce)</option>
+                                <option value="pcfx">PC-FX (mednafen_pcfx)</option>
+                                <option value="ngp">NeoGeo Pocket (mednafen_ngp)</option>
+                                <option value="ws">WonderSwan (mednafen_wswan)</option>
+                                <option value="amiga">Amiga (puae)</option>
+                                <option value="c64">Commodore 64 (vice_x64sc)</option>
+                                <option value="c128">Commodore 128 (vice_x128)</option>
+                                <option value="pet">Commodore PET (vice_xpet)</option>
+                                <option value="plus4">Commodore Plus/4 (vice_xplus4)</option>
+                                <option value="vic20">Commodore VIC-20 (vice_xvic)</option>
+                                <option value="coleco">ColecoVision (gearcoleco)</option>
+                            </optgroup>
+                        </select>
+                    </div>
+
+                    <div class="setting-group">
+                        <label for="gameUrl"><i class="fas fa-link"></i> Or enter game URL</label>
+                        <input type="text" id="gameUrl" placeholder="https://example.com/game.zip">
+                    </div>
+                    
+                    <div class="system-info" id="systemInfo">
+                        <i class="fas fa-info-circle"></i> The system will be automatically detected from the file extension. You can change it manually if needed.
+                    </div>
+                </div>
+
+                <div class="game-view">
+                    <div class="game-placeholder" id="gamePlaceholder">
+                        <i class="fas fa-gamepad"></i>
+                        <p>Game will appear here after loading</p>
+                    </div>
+                    <div id="game-container"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Background Controls -->
+    <div class="bg-controls">
+        <div class="control-group">
+            <label for="colorPicker">Overlay Color:</label>
+            <input type="color" id="colorPicker" value="#ff0000">
+        </div>
+        
+        <div class="control-group">
+            <label for="opacityRange">Opacity:</label>
+            <input type="range" id="opacityRange" min="0" max="100" value="0">
+        </div>
+    </div>
+
+    <!-- EmulatorJS Script -->
+    <script>
+        // Overlay control
+        const overlay = document.getElementById("overlay");
+        const colorPicker = document.getElementById("colorPicker");
+        const opacityRange = document.getElementById("opacityRange");
+        const notification = document.getElementById("notification");
+        const systemInfo = document.getElementById("systemInfo");
+        
+        function updateOverlay() {
+            const color = colorPicker.value;
+            const opacity = opacityRange.value / 100;
+            overlay.style.background = hexToRgba(color, opacity);
+        }
+        
+        function hexToRgba(hex, alpha) {
+            const r = parseInt(hex.substr(1, 2), 16);
+            const g = parseInt(hex.substr(3, 2), 16);
+            const b = parseInt(hex.substr(5, 2), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+        
+        colorPicker.addEventListener("input", updateOverlay);
+        opacityRange.addEventListener("input", updateOverlay);
+        
+        // Initial update - zero opacity
+        updateOverlay();
+        
+        // Show notification
+        function showNotification(message, type = 'success') {
+            notification.textContent = message;
+            notification.style.background = type === 'success' ? 
+                'rgba(46, 204, 113, 0.9)' : 'rgba(231, 76, 60, 0.9)';
+            notification.style.display = 'block';
+            
+            setTimeout(() => {
+                notification.style.display = 'none';
+            }, 3000);
+        }
+        
+        // Player controls
+        const gameFileInput = document.getElementById('gameFile');
+        const gameUrlInput = document.getElementById('gameUrl');
+        const gameSystemSelect = document.getElementById('gameSystem');
+        const dropzone = document.getElementById('dropzone');
+        const fileName = document.getElementById('fileName');
+        const gamePlaceholder = document.getElementById('gamePlaceholder');
+        const gameContainer = document.getElementById('game-container');
+        
+        // System to core mapping
+        const coreMap = {
+            'nes': 'fceumm',
+            'nestopia': 'nestopia',
+            'snes': 'snes9x',
+            'gb': 'gambatte',
+            'gba': 'mgba',
+            'vb': 'beetle_vb',
+            'nds': 'melonds',
+            'desmume2015': 'desmume2015',
+            'desmume': 'desmume',
+            'n64': 'mupen64plus_next',
+            'parallel-n64': 'parallel-n64',
+            'segaMD': 'genesis_plus_gx',
+            'segaMS': 'smsplus',
+            'sega32x': 'picodrive',
+            'saturn': 'yabause',
+            'gamegear': 'genesis_plus_gx',
+            'psx': 'pcsx_rearmed',
+            'mednafen_psx_hw': 'mednafen_psx_hw',
+            'psp': 'ppsspp',
+            'a5200': 'a5200',
+            'atari7800': 'prosystem',
+            'atari2600': 'stella2014',
+            'jaguar': 'virtualjaguar',
+            'lynx': 'handy',
+            'arcade': 'fbneo',
+            'fbalpha2012_cps1': 'fbalpha2012_cps1',
+            'fbalpha2012_cps2': 'fbalpha2012_cps2',
+            'mame2003': 'mame2003',
+            'mame2003_plus': 'mame2003_plus',
+            '3do': 'opera',
+            'pce': 'mednafen_pce',
+            'pcfx': 'mednafen_pcfx',
+            'ngp': 'mednafen_ngp',
+            'ws': 'mednafen_wswan',
+            'amiga': 'puae',
+            'c64': 'vice_x64sc',
+            'c128': 'vice_x128',
+            'pet': 'vice_xpet',
+            'plus4': 'vice_xplus4',
+            'vic20': 'vice_xvic',
+            'coleco': 'gearcoleco'
+        };
+        
+        // Extension to system mapping
+        const extMap = {
+            'nes': ['nes'],
+            'snes': ['sfc', 'smc'],
+            'gb': ['gb'],
+            'gba': ['gba'],
+            'nds': ['nds'],
+            'n64': ['n64', 'z64', 'v64'],
+            'segaMD': ['gen', 'md', 'smd'],
+            'segaMS': ['sms'],
+            'sega32x': ['32x'],
+            'saturn': ['bin', 'iso'],
+            'gamegear': ['gg'],
+            'psx': ['bin', 'img', 'cue', 'pbp'],
+            'psp': ['iso', 'cso', 'pbp', 'elf', 'prx'],
+            'a5200': ['a52', 'bin'],
+            'atari7800': ['a78', 'bin'],
+            'atari2600': ['a26', 'bin'],
+            'jaguar': ['j64', 'jag', 'bin'],
+            'lynx': ['lnx'],
+            'arcade': ['zip'],
+            '3do': ['iso', 'bin'],
+            'pce': ['pce', 'sgx'],
+            'ngp': ['ngp', 'ngc'],
+            'ws': ['ws', 'wsc'],
+            'amiga': ['adf', 'dms', 'ipf'],
+            'c64': ['crt', 'd64', 't64', 'prg'],
+            'coleco': ['col', 'bin']
+        };
+        
+        // Update system info when selection changes
+        gameSystemSelect.addEventListener('change', function() {
+            const system = this.value;
+            const core = coreMap[system];
+            
+            if (system === 'auto') {
+                systemInfo.innerHTML = '<i class="fas fa-info-circle"></i> The system will be automatically detected from the file extension.';
+            } else {
+                systemInfo.innerHTML = `<i class="fas fa-info-circle"></i> Selected system: ${system} - Core: ${core}`;
+                
+                // Add additional info for PSP system
+                if (system === 'psp') {
+                    systemInfo.innerHTML += '<br><i class="fas fa-exclamation-triangle"></i> PSP system requires enabling Threads for optimal performance.';
+                }
+            }
+            
+            // Reload game if a file is already loaded
+            if (gameFileInput.files.length) {
+                const file = gameFileInput.files[0];
+                loadGame(file);
+            }
+        });
+        
+        // Drag and drop file handling
+        dropzone.addEventListener('click', () => gameFileInput.click());
+        
+        dropzone.addEventListener('dragover', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#6c5ce7';
+            dropzone.style.background = 'rgba(108, 92, 231, 0.1)';
+        });
+        
+        dropzone.addEventListener('dragleave', () => {
+            dropzone.style.borderColor = '#74b9ff';
+            dropzone.style.background = 'rgba(116, 185, 255, 0.05)';
+        });
+        
+        dropzone.addEventListener('drop', (e) => {
+            e.preventDefault();
+            dropzone.style.borderColor = '#74b9ff';
+            dropzone.style.background = 'rgba(116, 185, 255, 0.05)';
+            
+            if (e.dataTransfer.files.length) {
+                gameFileInput.files = e.dataTransfer.files;
+                handleFileSelect();
+            }
+        });
+        
+        gameFileInput.addEventListener('change', handleFileSelect);
+        
+        function handleFileSelect() {
+            if (gameFileInput.files.length) {
+                const file = gameFileInput.files[0];
+                fileName.textContent = file.name;
+                fileName.style.display = 'block';
+                
+                // Automatically start loading the game
+                loadGame(file);
+            } else {
+                fileName.style.display = 'none';
+            }
+        }
+        
+        // Load and play game
+        function loadGame(file) {
+            const fileName = file.name.toLowerCase();
+            const fileExt = fileName.split('.').pop();
+            
+            // Auto-detect system if set to auto
+            let system = gameSystemSelect.value;
+            if (system === 'auto') {
+                for (const [sys, exts] of Object.entries(extMap)) {
+                    if (exts.includes(fileExt)) {
+                        system = sys;
+                        break;
+                    }
+                }
+                
+                if (system === 'auto') {
+                    showNotification('Could not identify game type. Please select the system manually.', 'error');
+                    return;
+                }
+                
+                // Update the selected dropdown
+                gameSystemSelect.value = system;
+                systemInfo.innerHTML = `<i class="fas fa-info-circle"></i> Auto-detected system: ${system} - Core: ${coreMap[system]}`;
+            }
+            
+            const core = coreMap[system];
+            if (!core) {
+                showNotification('Selected system is not supported', 'error');
+                return;
+            }
+            
+            showNotification(`Loading ${file.name}...`);
+            
+            // Hide placeholder
+            gamePlaceholder.style.display = 'none';
+            
+            // Create blob URL for the file
+            const blobUrl = URL.createObjectURL(file);
+            
+            // Clean up any previous player
+            if (window.EJS_cleanup) {
+                window.EJS_cleanup();
+            }
+            
+            // Setup EmulatorJS
+            window.EJS_player = '#game-container';
+            window.EJS_core = core;
+            window.EJS_gameUrl = blobUrl;
+            window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+            window.EJS_gameName = file.name;
+            window.EJS_startOnLoaded = true;
+            window.EJS_lightgun = false;
+            window.EJS_buttons = false;
+            
+            // Enable Threads for systems that need it like PSP
+            if (system === 'psp') {
+                window.EJS_threads = true;
+                showNotification('Enabled Threads for PSP system', 'success');
+            } else {
+                window.EJS_threads = false;
+            }
+            
+            // Cleanup function
+            window.EJS_cleanup = function() {
+                if (window.EJS_gameUrl && window.EJS_gameUrl.startsWith('blob:')) {
+                    URL.revokeObjectURL(window.EJS_gameUrl);
+                }
+                const oldScript = document.getElementById('emulator-script');
+                if (oldScript) {
+                    oldScript.remove();
+                }
+                gameContainer.innerHTML = '';
+            };
+            
+            // Load EmulatorJS script
+            const script = document.createElement('script');
+            script.id = 'emulator-script';
+            script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+            script.onload = function() {
+                showNotification(`Starting ${file.name} on ${system.toUpperCase()} system`);
+            };
+            
+            script.onerror = function() {
+                showNotification('Error loading game player', 'error');
+                gamePlaceholder.style.display = 'block';
+            };
+            
+            document.body.appendChild(script);
+        }
+        
+        // Support for loading games from URL
+        gameUrlInput.addEventListener('change', function() {
+            const url = this.value.trim();
+            if (url) {
+                showNotification(`Loading game from URL...`);
+                
+                // Clean up any previous player
+                if (window.EJS_cleanup) {
+                    window.EJS_cleanup();
+                }
+                
+                // Setup EmulatorJS for URL
+                window.EJS_player = '#game-container';
+                window.EJS_core = 'auto';
+                window.EJS_gameUrl = url;
+                window.EJS_pathtodata = 'https://cdn.emulatorjs.org/stable/data/';
+                window.EJS_gameName = 'Game from URL';
+                window.EJS_startOnLoaded = true;
+                
+                // Hide placeholder
+                gamePlaceholder.style.display = 'none';
+                
+                // Load EmulatorJS script
+                const script = document.createElement('script');
+                script.id = 'emulator-script';
+                script.src = 'https://cdn.emulatorjs.org/stable/data/loader.js';
+                document.body.appendChild(script);
+            }
+        });
+        
+        // Initial welcome message
+        setTimeout(() => {
+            showNotification('Welcome! Drag a game file or click to select a file to start playing');
+        }, 1000);
+    </script>
+</body>
+</html>
